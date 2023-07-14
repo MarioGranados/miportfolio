@@ -7,14 +7,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
-const StockModel = require("./Models/stockModel");
 const Stock = require("./Models/stockModel");
 
-const userModel = require("./Models/userModel");
 const User = require("./Models/userModel");
+const { CONNECT, SECRET, SALT} = require("./Models/Config");
 
-const salt = bcrypt.genSaltSync(8);
-const secret = "asdf";
+const salt = bcrypt.genSaltSync(SALT);
+const secret = `${SECRET}`;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,31 +21,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(
-  "mongodb+srv://mariogranados:lFiOvAn7sqzaUrCL@cluster0.cr3njog.mongodb.net/"
-);
+mongoose.connect(CONNECT);
 
 app.post("/stock", async (req, res) => {
   const { name, price } = req.body;
   try {
-    const stockData = await new Stock({ name, price });
+    const stockData = await Stock.create({ name, price });
     res.json(stockData);
-  } catch (error) {
-    res.status(400).json(e);
-  }
+  } catch (e) {
+    console.log(e);
+    res.status(400).json(e);  }
 });
 
 app.post("/register", async (req, res) => {
   const { username, firstName, lastName, email, password } = req.body;
   try {
-    const userData = await new User({
+    const userData = await User.create({
+      username,
       firstName,
       lastName,
       email,
       password: bcrypt.hashSync(password, salt),
     });
     res.json(userData);
-  } catch (error) {
+  } catch (e) {
+    console.log(e)
     res.status(400).json(e);
   }
 });
