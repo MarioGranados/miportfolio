@@ -10,10 +10,10 @@ const cookieParser = require("cookie-parser");
 const Stock = require("./Models/stockModel");
 
 const User = require("./Models/userModel");
-const { CONNECT, SECRET, SALT} = require("./Models/Config");
+// const { CONNECT, SECRET, SALT} = require("./Models/Config");
 
-const salt = bcrypt.genSaltSync(SALT);
-const secret = `${SECRET}`;
+const salt = bcrypt.genSaltSync(8);
+const secret = 'asdf';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(CONNECT);
+mongoose.connect("mongodb+srv://mariogranados:SRKoe56C8z2WxsQF@cluster0.cr3njog.mongodb.net/?retryWrites=true&w=majority");
 
 app.post("/stock", async (req, res) => {
   const { name, price } = req.body;
@@ -79,6 +79,20 @@ app.get("/profile", (req, res) => {
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
 });
+
+app.post('/post', async (req,res) => {
+  
+    const {token} = req.cookies;
+    jwt.verify(token, secret, {}, async (err,info) => {
+      const {name,pricet} = req.body;
+      const postDoc = await Post.create({
+        name,
+        price,
+        author:info.id,
+      });
+      res.json(postDoc);
+    });
+})
 
 app.get("/", (req, res) => res.send("Hello world!"));
 
