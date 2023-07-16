@@ -6,6 +6,15 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const multer = require('multer');
+const fs = require('fs');
+
+
+const corsOptions ={
+  origin:'http://localhost:3000', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}
 
 const Stock = require("./Models/stockModel");
 
@@ -18,10 +27,12 @@ const secret = 'asdf';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
-mongoose.connect("mongodb+srv://mariogranados:SRKoe56C8z2WxsQF@cluster0.cr3njog.mongodb.net/?retryWrites=true&w=majority");
+
+mongoose.connect("");
 
 app.post("/stock", async (req, res) => {
   const { name, price } = req.body;

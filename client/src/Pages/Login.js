@@ -13,6 +13,7 @@ export default function Login() {
 
   async function login(e) {
     e.preventDefault();
+    console.log(user)
     const response = await fetch("http://localhost:4000/login", {
       method: "POST",
       body: JSON.stringify(user),
@@ -23,7 +24,8 @@ export default function Login() {
       response.json().then((userInfo) => {
         setUserData(userInfo);
         //   setRedirect(true);
-        console.log(userData);
+        console.log(userData)
+        alert('logged in');
       });
     } else {
       alert("wrong credentials");
@@ -44,7 +46,7 @@ export default function Login() {
           onChange={handleChange}
           name="password"
         />
-        <input type="button" value="submit" />
+        <input type="submit" value="submit" />
       </form>
     </div>
   );
