@@ -12,6 +12,7 @@ export default function CreatePost() {
     setPost({ ...post, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
+    e.preventDefault();
     const respone = await fetch(`${API_URL}/post`, {
         method: 'POST',
         body: JSON.stringify(post),

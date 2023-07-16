@@ -32,17 +32,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-
-app.post("/stock", async (req, res) => {
-  const { name, price } = req.body;
-  try {
-    const stockData = await Stock.create({ name, price });
-    res.json(stockData);
-  } catch (e) {
-    console.log(e);
-    res.status(400).json(e);  }
-});
-
 app.post("/register", async (req, res) => {
   const { username, firstName, lastName, email, password } = req.body;
   try {
@@ -97,7 +86,7 @@ app.post('/post', async (req,res) => {
     const {token} = req.cookies;
     jwt.verify(token, secret, {}, async (err,info) => {
       const {name,price} = req.body;
-      const postDoc = await Post.create({
+      const postDoc = await Stock.create({
         name,
         price,
         author:info.id,
