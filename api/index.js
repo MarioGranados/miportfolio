@@ -32,7 +32,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-mongoose.connect("");
 
 app.post("/stock", async (req, res) => {
   const { name, price } = req.body;
@@ -67,11 +66,13 @@ app.post("/login", async (req, res) => {
   const passOk = bcrypt.compareSync(password, userDoc.password);
   if (passOk) {
     // logged in
-    jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
+    jwt.sign({firstName: userDoc.firstName, lastName: userDoc.lastName, username, id: userDoc._id }, secret, {}, (err, token) => {
       if (err) throw err;
       res.cookie("token", token).json({
         id: userDoc._id,
         username,
+        firstName: userDoc.firstName,
+        lastName: userDoc.lastName
       });
     });
   } else {
@@ -95,7 +96,7 @@ app.post('/post', async (req,res) => {
   
     const {token} = req.cookies;
     jwt.verify(token, secret, {}, async (err,info) => {
-      const {name,pricet} = req.body;
+      const {name,price} = req.body;
       const postDoc = await Post.create({
         name,
         price,

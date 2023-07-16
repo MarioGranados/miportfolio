@@ -4,4 +4,4 @@
 // export const SALT = 13
 
 
-//mongodb+srv://mariogranados:SRKoe56C8z2WxsQF@cluster0.cr3njog.mongodb.net/?retryWrites=true&w=majority
+mongoose.connect("mongodb+srv://mariogranados:SRKoe56C8z2WxsQF@cluster0.cr3njog.mongodb.net/?retryWrites=true&w=majority");

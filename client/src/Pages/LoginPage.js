@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { API_URL } from "../Config/Confg";
+import { Navigate } from "react-router-dom";
 
 export default function Login() {
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
+
+  const[redirect, setRedirect] = useState(false);
   const [userData, setUserData] = useState({});
 
   const handleChange = (e) => {
@@ -14,7 +18,7 @@ export default function Login() {
   async function login(e) {
     e.preventDefault();
     console.log(user)
-    const response = await fetch("http://localhost:4000/login", {
+    const response = await fetch(API_URL + '/login', {
       method: "POST",
       body: JSON.stringify(user),
       headers: { "Content-Type": "application/json" },
@@ -25,12 +29,17 @@ export default function Login() {
         setUserData(userInfo);
         //   setRedirect(true);
         console.log(userData)
-        alert('logged in');
+        setRedirect(true)
       });
     } else {
       alert("wrong credentials");
     }
   }
+
+  if(redirect) {
+    return (<Navigate to={'/profile'}/>)
+  }
+
   return (
     <div>
       <form onSubmit={login}>
