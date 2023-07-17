@@ -7,25 +7,33 @@ export default function CreatePost() {
     name: "",
     price: "",
   });
+
   const [redirect, setRedirect] = useState(false);
+
   const handleChange = (e) => {
     setPost({ ...post, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(JSON.stringify(post))
+
     const respone = await fetch(`${API_URL}/post`, {
-        method: 'POST',
-        body: JSON.stringify(post),
-        credentials: 'include',
-    })
-    if(respone.ok) {
-        setRedirect(true)
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(post),
+      credentials: "include",
+    });
+    if (respone.ok) {
+      setRedirect(true);
     }
-    e.preventDefault();
   };
-  
-  if(redirect) {
-    return (<Navigate to={'/profile'}/>)
+
+  if (redirect) {
+    return <Navigate to={"/profile"} />;
   }
   return (
     <>
