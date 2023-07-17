@@ -105,8 +105,7 @@ app.post("/post", async (req, res) => {
 });
 
 app.get("/all", async (req, res) => {
-  const { name, price } = req.body;
-  const stockDoc = await Stock.find();
+  const stockDoc = await Stock.find().lean()
   res.json(stockDoc);
 });
 
