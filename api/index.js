@@ -29,7 +29,9 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-
+mongoose.connect(
+  "mongodb+srv://mariogranados:SRKoe56C8z2WxsQF@cluster0.cr3njog.mongodb.net/?retryWrites=true&w=majority"
+);
 
 app.post("/register", async (req, res) => {
   const { username, firstName, lastName, email, password } = req.body;
@@ -105,7 +107,7 @@ app.post("/post", async (req, res) => {
 });
 
 app.get("/all", async (req, res) => {
-  const stockDoc = await Stock.find().lean()
+  const stockDoc = await Stock.find().lean
   res.json(stockDoc);
 });
 

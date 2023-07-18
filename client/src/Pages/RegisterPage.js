@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { API_URL } from "../Config/Confg";
 import { Navigate } from "react-router-dom";
+import FloatingLabel from "react-bootstrap/esm/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -32,44 +35,57 @@ export default function Register() {
     console.log(JSON.stringify(user));
   }
 
-  if(redirect) {
-    return(<Navigate to={'/login'}/>)
+  if (redirect) {
+    return <Navigate to={"/login"} />;
   }
 
   return (
     <>
       <form onSubmit={register}>
-        <input
-          type="text"
-          placeholder="username"
-          onChange={handleChange}
-          name="username"
-        />
-        <input
-          type="text"
-          placeholder="first name"
-          onChange={handleChange}
-          name="firstName"
-        />
-        <input
-          type="text"
-          placeholder="last name"
-          onChange={handleChange}
-          name="lastName"
-        />
-        <input
-          type="email"
-          placeholder="email"
-          onChange={handleChange}
-          name="email"
-        />
-        <input
-          type="password"
-          placeholder="password"
-          onChange={handleChange}
-          name="password"
-        />
-        <input type="submit" value="submit" />
+        <FloatingLabel controlId="username" label="username" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="username"
+            name="username"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="firstName" label="first name" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="first name"
+            name="firstName"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="lastName" label="last name" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="last name"
+            name="lastName"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="email" label="email" className="mb-3">
+          <Form.Control
+            type="email"
+            placeholder="email"
+            name="email"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="password" label="password" className="mb-3">
+          <Form.Control
+            type="password"
+            placeholder="password"
+            name="password"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+
+        <Button type="submit" variant="primary">
+          Register
+        </Button>
       </form>
     </>
   );

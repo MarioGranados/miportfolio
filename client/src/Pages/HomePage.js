@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../Config/Confg";
+import StockCards from "../Components/StockCards";
+import Cards from "../Components/StockCards";
+import Spinner from 'react-bootstrap/Spinner'
 
 export default function HomePage() {
-  const [dataDocument, setDataDocument] = useState();
-  useEffect(() => {
-    fetch(`${API_URL}/all`).then((response) => {
-      response.json().then((data) => {
-        setDataDocument(data);
-      });
-    });
-  }, []);
-  function test(e) {
-    e.preventDefault();
-    console.log(dataDocument);
+  const [dataDocument, setDataDocument] = useState([]);
+  let append = [];
+  async function getRequest() {
+    const response = await fetch(`${API_URL}/all`);
+    const data = await response.json();
+    setDataDocument(data);
   }
+  useEffect(() => {
+    getRequest();
+  }, []);
 
-  return (
-    <>
-      <button onClick={test}>test</button>
-      Home Page
-    </>
-  );
+  if (dataDocument.length != 0) {
+    return <>
+    {dataDocument.map((item, index)=>{
+         return <Cards props={item} key={index}/>
+     })}
+    </>;
+  } else {
+    return <><Spinner animation="grow" /></>;
+  }
 }

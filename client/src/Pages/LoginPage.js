@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { API_URL } from "../Config/Confg";
 import { Navigate } from "react-router-dom";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Button from "react-bootstrap/Button";
+import  Form  from "react-bootstrap/Form";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -43,19 +46,23 @@ export default function Login() {
   return (
     <div>
       <form onSubmit={login}>
-        <input
-          type="text"
-          placeholder="username"
-          onChange={handleChange}
-          name="username"
-        />
-        <input
-          type="password"
-          placeholder="password"
-          onChange={handleChange}
-          name="password"
-        />
-        <input type="submit" value="submit" />
+      <FloatingLabel controlId="username" label="username" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="username"
+            name="username"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+              <FloatingLabel controlId="password" label="password" className="mb-3">
+          <Form.Control
+            type="password"
+            placeholder="password"
+            name="password"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+        <Button type="submit" variant="primary">Log In</Button>
       </form>
     </div>
   );

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { API_URL } from "../Config/Confg";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Button from 'react-bootstrap/Button'
 
 export default function CreatePost() {
   const [post, setPost] = useState({
@@ -16,13 +19,13 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(JSON.stringify(post))
+    console.log(JSON.stringify(post));
 
     const respone = await fetch(`${API_URL}/post`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(post),
       credentials: "include",
@@ -38,19 +41,28 @@ export default function CreatePost() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="stock name"
-          name="name"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          placeholder="stock price"
-          name="price"
-          onChange={handleChange}
-        />
-        <input type="submit" value="submit" />
+        <FloatingLabel controlId="name" label="name" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="stock name"
+            name="name"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+
+        <FloatingLabel
+          controlId="stockPrice"
+          label="stock price"
+          className="mb-3"
+        >
+          <Form.Control
+            type="text"
+            placeholder="stock price"
+            name="price"
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+        <Button type="submit" variant="primary">Submit</Button>
       </form>
     </>
   );
