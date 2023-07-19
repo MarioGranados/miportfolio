@@ -9,11 +9,15 @@ import HomePage from "./Pages/HomePage";
 import Profile from "./Pages/Profile";
 import Logout from "./Pages/Logout";
 import ErrorPage from "./Pages/ErrorPage";
+import NavbarComp from "./Components/NavbarComp";
+import Footer from "./Components/Footer";
+import Stock from "./Pages/Stock";
 
 function App() {
   return (
     <>
-        <BrowserRouter>
+      <BrowserRouter>
+        <NavbarComp/>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -22,11 +26,14 @@ function App() {
             <Route path="/post/:id" element={<Post />} />
             <Route path="/edit/:id" element={<EditPost />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/stock" element={<Stock />} />
+
 
             <Route path="*" element={<ErrorPage />} />
             <Route path="/logout" element={<Logout />} />
           </Routes>
-        </BrowserRouter>
+          <Footer/>
+      </BrowserRouter>
     </>
   );
 }

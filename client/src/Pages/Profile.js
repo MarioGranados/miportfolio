@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API_URL } from "../Config/Confg";
+import { Navigate } from "react-router-dom";
 
 export default function Profile() {
   const [user, setUserInfo] = useState({});
@@ -12,6 +13,9 @@ export default function Profile() {
       });
     });
   }, []);
+  if(user.username == null) {
+    return <Navigate to={'/login'}/>
+  }
   return (
     <>
       Welcome {user.username == null ? "null" : user.username + " "} glad to

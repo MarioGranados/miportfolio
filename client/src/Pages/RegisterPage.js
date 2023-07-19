@@ -4,6 +4,8 @@ import { Navigate } from "react-router-dom";
 import FloatingLabel from "react-bootstrap/esm/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Card from 'react-bootstrap/Card'
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -40,53 +42,73 @@ export default function Register() {
   }
 
   return (
-    <>
-      <form onSubmit={register}>
-        <FloatingLabel controlId="username" label="username" className="mb-3">
-          <Form.Control
-            type="text"
-            placeholder="username"
-            name="username"
-            onChange={handleChange}
-          />
-        </FloatingLabel>
-        <FloatingLabel controlId="firstName" label="first name" className="mb-3">
-          <Form.Control
-            type="text"
-            placeholder="first name"
-            name="firstName"
-            onChange={handleChange}
-          />
-        </FloatingLabel>
-        <FloatingLabel controlId="lastName" label="last name" className="mb-3">
-          <Form.Control
-            type="text"
-            placeholder="last name"
-            name="lastName"
-            onChange={handleChange}
-          />
-        </FloatingLabel>
-        <FloatingLabel controlId="email" label="email" className="mb-3">
-          <Form.Control
-            type="email"
-            placeholder="email"
-            name="email"
-            onChange={handleChange}
-          />
-        </FloatingLabel>
-        <FloatingLabel controlId="password" label="password" className="mb-3">
-          <Form.Control
-            type="password"
-            placeholder="password"
-            name="password"
-            onChange={handleChange}
-          />
-        </FloatingLabel>
+    <Container>
+      <Card>
+        <Card.Body>
+          <form onSubmit={register}>
+            <FloatingLabel
+              controlId="username"
+              label="username"
+              className="mb-3"
+            >
+              <Form.Control
+                type="text"
+                placeholder="username"
+                name="username"
+                onChange={handleChange}
+              />
+            </FloatingLabel>
+            <FloatingLabel
+              controlId="firstName"
+              label="first name"
+              className="mb-3"
+            >
+              <Form.Control
+                type="text"
+                placeholder="first name"
+                name="firstName"
+                onChange={handleChange}
+              />
+            </FloatingLabel>
+            <FloatingLabel
+              controlId="lastName"
+              label="last name"
+              className="mb-3"
+            >
+              <Form.Control
+                type="text"
+                placeholder="last name"
+                name="lastName"
+                onChange={handleChange}
+              />
+            </FloatingLabel>
+            <FloatingLabel controlId="email" label="email" className="mb-3">
+              <Form.Control
+                type="email"
+                placeholder="email"
+                name="email"
+                onChange={handleChange}
+              />
+            </FloatingLabel>
+            <FloatingLabel
+              controlId="password"
+              label="password"
+              className="mb-3"
+            >
+              <Form.Control
+                type="password"
+                placeholder="password"
+                name="password"
+                onChange={handleChange}
+              />
+            </FloatingLabel>
 
-        <Button type="submit" variant="primary">
-          Register
-        </Button>
-      </form>
-    </>
+            <Button type="submit" variant="primary">
+              Register
+            </Button>
+          </form>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 }
