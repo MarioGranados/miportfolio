@@ -1,26 +1,36 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { STOCK_API_KEY } from "../Config/Confg";
 import { Chart } from "react-google-charts";
 
 export default function Stock() {
   const [symbol, setSymbol] = useState("IBM");
-  const [stockData, setStockData] = useState({});
-  const [day, setDay] = useState([]);
-  const [info, setInfo] = useState([]);
+  const [stockData, setStockData] = useState([]);
   //const URL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=60min&apikey=${STOCK_API_KEY}`;
-  const URL = './client/src/Pages/data.json'
+  const URL = "./data.json";
 
-  async function fetchStockData() {
-    const response = await fetch(`${URL}`, {
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       }
-    });
-    const data = await response.json();
-    setStockData(data)
-    console.log(data)
+  function fetchStockData() {
+    let chartInputData = [];
+    let arr = [];
+
+    fetch(URL)
+      .then((response) => response.json())
+      .then((data) => {
+        let day = Object.keys(data["Time Series (5min)"]);
+        let results = Object.values(data["Time Series (5min)"]);
+
+        for (let i = 0; i < day.length; i++) {
+          arr.push(day[i]);
+          arr.push(Number(results[i]["1. open"]));
+          arr.push(Number(results[i]["2. high"]));
+          arr.push(Number(results[i]["3. low"]));
+          arr.push(Number(results[i]["4. close"]));
+          chartInputData.push(arr);
+          arr = [];
+        }
+      });
+
+    setStockData(chartInputData);
+    console.log(stockData);
   }
 
   // if(stockData != null) {
@@ -64,13 +74,17 @@ export default function Stock() {
     fetchStockData();
   }, []);
 
-  return (
-    <Chart
-      chartType="CandlestickChart"
-      width="100%"
-      height="400px"
-      // data={data}
-      options={options}
-    />
-  );
+  if (stockData.length == 0) {
+    return <>Loading..</>;
+  } else {
+    return (
+      <Chart
+        chartType="CandlestickChart"
+        width="100%"
+        height="400px"
+        // data={data}
+        options={options}
+      />
+    );
+  }
 }
