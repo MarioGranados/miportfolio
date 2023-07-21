@@ -22,7 +22,6 @@ export default function Login() {
 
   async function login(e) {
     e.preventDefault();
-    console.log(user);
     const response = await fetch(API_URL + "/login", {
       method: "POST",
       body: JSON.stringify(user),
@@ -32,8 +31,6 @@ export default function Login() {
     if (response.ok) {
       response.json().then((userInfo) => {
         setUserData(userInfo);
-        //   setRedirect(true);
-        console.log(userData);
         setRedirect(true);
       });
     } else {

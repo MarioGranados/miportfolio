@@ -5,8 +5,8 @@ import Container from "react-bootstrap/Container";
 import Spinner from "react-bootstrap/Spinner";
 import Form from "react-bootstrap/Form";
 
-export default function Stock({searchedSymbol}) {
-  const [symbol, setSymbol] = useState(searchedSymbol);
+export default function Stock() {
+  const [symbol, setSymbol] = useState('IBM');
   const [stockData, setStockData] = useState([]);
   const [err, setError] = useState(false);
   const [time, setTime] = useState(60);
@@ -57,7 +57,7 @@ export default function Stock({searchedSymbol}) {
   // ];
 
   const options = {
-    legend: "none",
+    legend: "",
     candlestick: {
       fallingColor: { strokeWidth: 0, fill: "#a52714" }, // red
       risingColor: { strokeWidth: 0, fill: "#0f9d58" }, // green
