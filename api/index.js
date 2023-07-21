@@ -29,9 +29,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(
-  "mongodb+srv://mariogranados:SRKoe56C8z2WxsQF@cluster0.cr3njog.mongodb.net/?retryWrites=true&w=majority"
-);
+
 
 app.post("/register", async (req, res) => {
   const { username, firstName, lastName, email, password } = req.body;
@@ -109,6 +107,20 @@ app.post("/post", async (req, res) => {
 app.get("/all", async (req, res) => {
   const stockDoc = await Stock.find().lean()
   res.json(stockDoc);
+});
+
+app.get('/post', async (req,res) => {
+  const { token } = req.cookies;
+  jwt.verify(token, secret, {}, (err, info) => {
+    if (err) throw err;
+    res.json(info);
+  });
+  res.json(
+    await Stock.find()
+      .populate('author', ['username'])
+      .sort({createdAt: -1})
+      .limit(20)
+  );
 });
 
 const port = process.env.PORT || 4000;

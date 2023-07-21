@@ -28,8 +28,8 @@ export default function Cards(props) {
           <Card.Title>{name}</Card.Title>
           <Card.Subtitle>{price}</Card.Subtitle>
           <Card.Text> lorem ipsum for es late! </Card.Text>
-          <Card.Link>Chart</Card.Link>
-          <Button variant="delete">Remove from portfolio</Button>
+          <Button variant="secondary" className="mx-1">Chart Info</Button>
+          <Button variant="danger" className="mx-1">Remove from portfolio</Button>
         </Card.Body>
       </Card>
     </>

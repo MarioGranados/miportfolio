@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { API_URL } from "../Config/Confg";
 import { Navigate } from "react-router-dom";
 import { Chart } from "react-google-charts";
+import Container from "react-bootstrap/esm/Container";
+import Row from 'react-bootstrap/Row'
+import StockCards from '../Components/StockCards'
 
 export default function Profile() {
+  const [posts, setPosts] = useState([]);
   const data = [
     ["Year", "Current", "Expected"],
     ["2004", 1000, 400],
@@ -27,26 +31,40 @@ export default function Profile() {
         setUserInfo(userInfo);
       });
     });
+
+    fetch('http://localhost:4000/post').then(response => {
+      response.json().then(posts => {
+        setPosts(posts)
+      });
+    });
   }, []);
-  if (user.username == '') {
+  if (user.username == "") {
     return <Navigate to={"/login"} />;
   }
   return (
     <>
-      Welcome {user.username == null ? "null" : user.username + " "} glad to
-      have you back{" "}
-      {user.username == null
-        ? "null"
-        : " " + user.firstName + " " + user.lastName}
+      <Container>
+        <Row>
+        Welcome {user.username == null ? "null" : user.username + " "} glad to
+        have you back{" "}
+        {user.username == null
+          ? "null"
+          : " " + user.firstName + " " + user.lastName}
+        </Row>
+        <Row>
+        <Chart
+          chartType="LineChart"
+          width="100%"
+          height="400px"
+          data={data}
+          options={options}
+        />
+        </Row>
+        {posts.map((item, index) => {
+          return <StockCards props={item} key={index} />;
+        })}
 
-<Chart
-      chartType="LineChart"
-      width="100%"
-      height="400px"
-      data={data}
-      options={options}
-    />
-
+      </Container>
     </>
   );
 }
