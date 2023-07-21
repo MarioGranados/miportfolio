@@ -1,43 +1,50 @@
 import { useEffect, useState } from "react";
 import { STOCK_API_KEY } from "../Config/Confg";
 import { Chart } from "react-google-charts";
+import Container from "react-bootstrap/Container";
+import Spinner from "react-bootstrap/Spinner";
+import Form from "react-bootstrap/Form";
 
-export default function Stock() {
-  const [symbol, setSymbol] = useState("IBM");
+export default function Stock({searchedSymbol}) {
+  const [symbol, setSymbol] = useState(searchedSymbol);
   const [stockData, setStockData] = useState([]);
-  //const URL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=60min&apikey=${STOCK_API_KEY}`;
+  const [err, setError] = useState(false);
+  const [time, setTime] = useState(60);
+  const [days, setDays] = useState(50);
+  const [interval, setInterval] = useState('TIME_SERIES_INTRADAY');
+
+
+  //const URL = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}&interval=${time}min&apikey=${STOCK_API_KEY}`;
   const URL = "./data.json";
 
-  function fetchStockData() {
+  async function fetchStockData() {
     let chartInputData = [];
     let arr = [];
+    const chartInfo = ["Day", "", "", "", ""];
+    chartInputData.push(chartInfo);
 
-    fetch(URL)
+    await fetch(URL)
       .then((response) => response.json())
       .then((data) => {
-        let day = Object.keys(data["Time Series (5min)"]);
-        let results = Object.values(data["Time Series (5min)"]);
+        let day = Object.keys(data[`Time Series (${time}min)`]);
+        let results = Object.values(data[`Time Series (${time}min)`]);
 
-        for (let i = 0; i < day.length; i++) {
+        for (let i = 0; i < days; i++) {
           arr.push(day[i]);
-          arr.push(Number(results[i]["1. open"]));
-          arr.push(Number(results[i]["2. high"]));
           arr.push(Number(results[i]["3. low"]));
+          arr.push(Number(results[i]["1. open"]));
           arr.push(Number(results[i]["4. close"]));
+          arr.push(Number(results[i]["2. high"]));
           chartInputData.push(arr);
           arr = [];
         }
       });
 
+    if (chartInputData.length > 0) {
+      setError(true);
+    }
     setStockData(chartInputData);
-    console.log(stockData);
   }
-
-  // if(stockData != null) {
-  // const day = Object.keys(stockData["Time Series (60min)"]);
-  // const results = Object.values(stockData["Time Series (60min)"]);
-  // }
-
   //Convert Day and results to data format shown below
   // day open close low high
   //  const chartdata = [
@@ -48,43 +55,58 @@ export default function Stock() {
   //   ["Thu", 50, 77, 66, 77],
   //   ["Fri", 15, 66, 22, 68],
   // ];
-  // const chartInputData = [];
-  // let arr = [];
-  // const chartInfo = ["Day", "Open Close", "High", "Low", "Close"];
-  // chartInputData.push(chartInfo)
-
-  // for(let i = 0; i < day.length; i++) {
-  //   arr.push(day[i]);
-  //   arr.push(Number(results[i]["1. open"]))
-  //   arr.push(Number(results[i]["2. high"]));
-  //   arr.push(Number(results[i]["3. low"]));
-  //   arr.push(Number(results[i]["4. close"]));
-  //   chartInputData.push(arr);
-  //   arr = [];
-  // }
-
-  // console.log('chart input')
-  // console.log(chartInputData)
 
   const options = {
     legend: "none",
+    candlestick: {
+      fallingColor: { strokeWidth: 0, fill: "#a52714" }, // red
+      risingColor: { strokeWidth: 0, fill: "#0f9d58" }, // green
+    },
   };
 
   useEffect(() => {
     fetchStockData();
-  }, []);
+  }, [err, interval, time]);
 
-  if (stockData.length == 0) {
-    return <>Loading..</>;
+  if (err === false) {
+    return (
+      <Container>
+        <h2>{symbol}</h2>
+        <Spinner animation="grow" variant="primary" />
+      </Container>
+    );
   } else {
     return (
-      <Chart
-        chartType="CandlestickChart"
-        width="100%"
-        height="400px"
-        // data={data}
-        options={options}
-      />
+      <>
+        <Container>
+          <h2>{symbol}</h2>
+          <Chart
+            chartType="CandlestickChart"
+            width="100%"
+            height="400px"
+            data={stockData}
+            options={options}
+          />
+        </Container>
+        <Container>
+          <Form className="mt-4">
+            <Form.Select aria-label="Default select example" onChange={(e) => setTime(e.target.value)}>
+              <option value='60min'>Time: 1hr</option>
+              <option value="30min">Time: 30min</option>
+              <option value="15min">Time: 15min</option>
+              <option value="5min">Time: 5min</option>
+              <option value="1min">Time: 1min</option>
+            </Form.Select>
+
+            <Form.Select aria-label="Default select example" onChange={(e) => setInterval(e.target.value)}>
+              <option value='TIME_SERIES_DAILY'>Daily</option>
+              <option value="TIME_SERIES_INTRADAY">Intraday</option>
+              <option value="TIME_SERIES_WEEKLY">Weekly</option>
+              <option value="TIME_SERIES_MONTHLY">Monthly</option>
+            </Form.Select>
+          </Form>
+        </Container>
+      </>
     );
   }
 }
